@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SVG to 3D — SVG Extruder</title>
+<style>
+:root{--bg:#10141d;--panel:#191f2b;--panel2:#202838;--line:#303b4f;--text:#edf2fa;--muted:#9ba9bd;--accent:#62d6bd;--accent2:#8b9dff;--danger:#ff8b8b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;background:#131925;position:sticky;top:0;z-index:5}
+h1{font-size:20px;margin:0;font-weight:750;letter-spacing:.2px}header p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#10141d;font-weight:900;font-size:20px}
+main{display:grid;grid-template-columns:330px minmax(0,1fr);min-height:calc(100vh - 76px)}
+aside{padding:18px;border-right:1px solid var(--line);background:var(--panel);overflow:auto;max-height:calc(100vh - 76px)}
+section{margin-bottom:19px}.section-title{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:800;margin-bottom:10px}
+label{display:block;color:#dbe4f2;font-size:12px;margin:10px 0 6px}
+input[type=file]{display:none} .filebox{border:1px dashed #52617a;border-radius:12px;padding:16px;text-align:center;background:#151b27;cursor:pointer;color:var(--muted)}.filebox strong{display:block;color:var(--text);margin-bottom:4px}.filebox:hover{border-color:var(--accent)}
+input[type=number],input[type=text],select{width:100%;background:#111722;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 10px;outline:none}
+input[type=range]{width:100%;accent-color:var(--accent)}.range-line{display:flex;justify-content:space-between;align-items:center;gap:8px}.value{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:750}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.checkrow{display:flex;align-items:center;gap:8px;color:#dbe4f2;font-size:12px;margin-top:10px}.checkrow input{accent-color:var(--accent)}
+button{border:0;border-radius:9px;padding:10px 12px;font-weight:750;cursor:pointer;color:#10141d;background:var(--accent);transition:.15s}button:hover{filter:brightness(1.06);transform:translateY(-1px)}button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+button.secondary{background:#2b3548;color:var(--text);border:1px solid #3a4860}button.blue{background:var(--accent2)}button.full{width:100%;margin-top:8px}
+.note{font-size:11px;color:var(--muted);line-height:1.5}.notice{border:1px solid #66572f;background:#282416;color:#e9d9a7;border-radius:10px;padding:10px;font-size:11px;margin-top:12px}
+#layers{display:flex;flex-direction:column;gap:7px;max-height:230px;overflow:auto}.layer{display:grid;grid-template-columns:24px minmax(0,1fr) 36px;gap:8px;align-items:center;background:#141a25;border:1px solid var(--line);border-radius:8px;padding:7px}.layer input[type=color]{width:28px;height:27px;padding:0;border:0;background:none;cursor:pointer}.layer .layername{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.layer small{display:block;color:var(--muted);font-size:10px}.layer input[type=checkbox]{accent-color:var(--accent)}
+.workspace{min-width:0;display:flex;flex-direction:column;min-height:calc(100vh - 76px)}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:#141a25}.toolbar .spacer{flex:1}.toolbar span{color:var(--muted);font-size:12px}
+#viewport{position:relative;flex:1;min-height:460px;height:calc(100vh - 190px);background:radial-gradient(ellipse at center,#222c3c 0%,#151b27 65%,#111620 100%);overflow:hidden}
+#viewport canvas{display:block;width:100%;height:100%}.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;color:var(--muted)}.empty .empty-inner{max-width:340px;padding:24px}.empty strong{font-size:17px;color:#e8eef7;display:block;margin-bottom:8px}
+.statusbar{padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;background:#141a25}.pill{border:1px solid var(--line);padding:3px 7px;border-radius:20px}
+@media(max-width:850px){main{grid-template-columns:1fr}aside{max-height:none;border-right:0;border-bottom:1px solid var(--line)}#viewport{min-height:440px}header{position:static}}
+</style>
+<script>
+window.addEventListener('error', function(e) {
+  const status = document.getElementById('status');
+  if (status && e.message) status.textContent = 'Preview error: ' + e.message + ' — check internet access and reload.';
+});
+window.addEventListener('unhandledrejection', function(e) {
+  const status = document.getElementById('status');
+  if (status) status.textContent = 'Preview startup error. Check internet access, then reload the page.';
+});
+</script>
+</head>
+<body>
+<header><div class="brand"><div class="logo">3D</div><div><h1>SVG → 3D Extruder</h1><p>Turn vector artwork into a height-adjustable printable model</p></div></div><span class="pill">Browser-based</span></header>
+<main>
+<aside>
+  <section>
+    <div class="section-title">1 · Import artwork</div>
+    <label class="filebox" for="svgFile"><strong>Choose an SVG file</strong><span id="fileLabel">or click here to browse</span></label>
+    <input id="svgFile" type="file" accept=".svg,image/svg+xml">
+    <p class="note">Best results: SVGs made from filled, closed shapes. Text should be converted to paths in your vector editor first.</p>
+  </section>
+  <section>
+    <div class="section-title">2 · Model dimensions</div>
+    <label for="height">Extrusion height <span class="value" id="heightVal">5.0 mm</span></label>
+    <input id="height" type="range" min="0.4" max="50" step="0.2" value="5">
+    <div class="row">
+      <div><label for="width">Model width (mm)</label><input id="width" type="number" min="1" max="500" step="1" value="100"></div>
+      <div><label for="bevel">Bevel (mm)</label><input id="bevel" type="number" min="0" max="3" step="0.2" value="0"></div>
+    </div>
+    <label for="quality">Curve detail</label><select id="quality"><option value="2">Fast</option><option value="4" selected>Balanced</option><option value="8">High detail</option><option value="12">Very high detail</option></select>
+    <label class="checkrow"><input id="center" type="checkbox" checked> Center model on the build plate</label>
+    <label class="checkrow"><input id="showEdges" type="checkbox"> Show mesh edges (preview only)</label>
+  </section>
+  <section>
+    <div class="section-title">3 · Colours & shapes</div>
+    <p class="note">Change each SVG path's preview/export colour. Untick a row to hide that shape.</p>
+    <div id="layers"><div class="note">Load an SVG to see its shapes here.</div></div>
+    <button class="secondary full" id="allColors" disabled>Apply one colour to all</button>
+    <input id="allColorPicker" type="color" value="#62d6bd" style="display:none">
+  </section>
+  <section>
+    <div class="section-title">4 · Export model</div>
+    <button id="exportStl" class="full" disabled>Export STL (single-colour geometry)</button>
+    <button id="exportObj" class="blue full" disabled>Export coloured OBJ + MTL</button>
+    <p class="note">OBJ + MTL keeps the separate shape colours in compatible slicers and 3D tools. STL files do not store colour in the standard format.</p>
+    <div class="notice">For a multicolour 3D print, import the exported OBJ/MTL into software that supports coloured meshes, or assign filaments by part in your slicer. STL export combines visible shapes into one mesh.</div>
+  </section>
+</aside>
+<div class="workspace">
+  <div class="toolbar">
+    <button class="secondary" id="resetView" disabled>Reset view</button>
+    <button class="secondary" id="wireBtn" disabled>Wireframe</button>
+    <span>Drag to orbit · scroll to zoom · right-drag to pan</span><div class="spacer"></div><span id="shapeCount">No model loaded</span>
+  </div>
+  <div id="viewport">
+    <div class="empty" id="empty"><div class="empty-inner"><strong>Your 3D model will appear here</strong>Upload an SVG, adjust the height and width, then export your model for printing.</div></div>
+  </div>
+  <div class="statusbar"><span id="status">Ready · Select an SVG to begin</span><span id="dimensions">—</span></div>
+</div>
+</main>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { SVGLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/SVGLoader.js';
+import { STLExporter } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/exporters/STLExporter.js';
+
+const $=id=>document.getElementById(id);
+const viewport=$('viewport');
+let scene,camera,renderer,controls,modelRoot,svgText='',baseShapes=[],meshEntries=[],wire=false,modelName='model';
+try { initScene(); animate(); }
+catch (e) { console.error(e); setTimeout(()=>{ const el=document.getElementById('status'); if(el)el.textContent='3D preview failed to start. Check your internet connection and reload; details may appear in the browser console.'; },0); }
+
+function initScene(){
+ scene=new THREE.Scene(); scene.background=null;
+ camera=new THREE.PerspectiveCamera(45,1,.1,5000); camera.position.set(0,-200,100);
+ renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputColorSpace=THREE.SRGBColorSpace;
+ viewport.appendChild(renderer.domElement);
+ controls=new OrbitControls(camera,renderer.domElement); controls.enableDamping=true; controls.target.set(0,0,10);
+ scene.add(new THREE.HemisphereLight(0xffffff,0x65718b,2.1));
+ const key=new THREE.DirectionalLight(0xffffff,2.6);key.position.set(100,-120,220);scene.add(key);
+ const fill=new THREE.DirectionalLight(0x9db8ff,1.1);fill.position.set(-120,100,70);scene.add(fill);
+ const grid=new THREE.GridHelper(240,24,0x536078,0x30394a);grid.rotation.x=Math.PI/2;grid.position.z=-.15;scene.add(grid);
+ modelRoot=new THREE.Group();scene.add(modelRoot);
+ resize();window.addEventListener('resize',resize);
+}
+function resize(){const w=viewport.clientWidth,h=viewport.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/Math.max(1,h);camera.updateProjectionMatrix();}
+function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera);}
+function setStatus(s){$('status').textContent=s;}
+function clearModel(){while(modelRoot.children.length){const o=modelRoot.children[0];modelRoot.remove(o);if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}}meshEntries=[];}
+function colorFromPath(path,index){
+ const s=path.userData?.style||{};let c=s.fill;
+ if(!c||c==='none'||c==='transparent') c=['#62d6bd','#8b9dff','#ffb86b','#ff7c9b','#e8e879','#76b8ff'][index%6];
+ try{if(c.startsWith('url('))c='#62d6bd';return new THREE.Color(c).getStyle();}catch{return '#62d6bd';}
+}
+// Detect separate nested SVG contours (common in exported logos/fonts) and
+// convert odd-depth contours into real Shape holes instead of solid overlays.
+function pointInPolygon(point, polygon){
+ let inside=false;
+ for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){
+  const a=polygon[i],b=polygon[j];
+  if(((a.y>point.y)!==(b.y>point.y)) && point.x < (b.x-a.x)*(point.y-a.y)/(b.y-a.y)+a.x) inside=!inside;
+ }
+ return inside;
+}
+function mergeNestedContours(items){
+ if(items.length<2)return items;
+ const contours=items.map((item,index)=>{
+  const pts=item.shape.getPoints(12);
+  let area=0;
+  for(let i=0,j=pts.length-1;i<pts.length;j=i++)area+=pts[j].x*pts[i].y-pts[i].x*pts[j].y;
+  return {...item,index,pts,area:Math.abs(area),parent:-1,depth:0};
+ });
+ // Use a point on each contour and choose the smallest enclosing contour as parent.
+ for(const c of contours){
+  if(c.pts.length<3)continue;
+  const test=c.pts[0];let bestArea=Infinity;
+  for(const other of contours){
+   if(other===c||other.area<=c.area)continue;
+   if(other.area<bestArea && pointInPolygon(test,other.pts)){c.parent=other.index;bestArea=other.area;}
+  }
+ }
+ for(const c of contours){let p=c.parent,guard=0;while(p!==-1&&guard++<contours.length){c.depth++;p=contours[p].parent;}}
+ // Odd nesting levels are holes; even levels are solids/islands.
+ for(const c of contours){
+  if(c.depth%2===1){
+   let parent=contours[c.parent];
+   while(parent && parent.depth%2===1)parent=contours[parent.parent];
+   if(parent)parent.shape.holes.push(c.shape);
+  }
+ }
+ return contours.filter(c=>c.depth%2===0).map(c=>({shape:c.shape,pathIndex:c.pathIndex,subIndex:c.subIndex,name:c.name,color:c.color,visible:c.visible,style:c.style}));
+}
+
+function loadSvg(text,name){
+ try{
+  const xmlDoc=new DOMParser().parseFromString(text,'image/svg+xml');
+  const parseError=xmlDoc.querySelector('parsererror');
+  if(parseError) throw new Error('The SVG file appears to be invalid XML.');
+  const root=xmlDoc.documentElement;
+  if(!root || root.nodeName.toLowerCase().split(':').pop()!=='svg') throw new Error('This file does not contain an <svg> root element.');
+  const loader=new SVGLoader();
+  const data=loader.parse(text);
+  baseShapes=[];
+  // Use SVGLoader's computed style where available; if it doesn't provide a fill,
+  // allow the path unless its own or an ancestor's fill is explicitly "none".
+  data.paths.forEach((path,pi)=>{
+   const style=path.userData?.style||{};
+   const fill=style.fill;
+   const rawNode=path.userData?.node;
+   let nodeFill=null;
+   if(rawNode){
+    let node=rawNode;
+    while(node && node.nodeType===1){
+     if(node.hasAttribute?.('fill')) { nodeFill=node.getAttribute('fill'); break; }
+     const st=node.getAttribute?.('style')||'';
+     const m=st.match(/(?:^|;)\s*fill\s*:\s*([^;]+)/i);
+     if(m){nodeFill=m[1].trim();break;}
+     node=node.parentElement;
+    }
+   }
+   const effectiveFill=(fill && fill!=='none') ? fill : nodeFill;
+   if(effectiveFill==='none' || (fill==='none' && !nodeFill) || /^url\(/i.test(effectiveFill||'')) return;
+   let shapes=[];
+   try { shapes=SVGLoader.createShapes(path); } catch(err) { console.warn('Could not convert SVG path',pi,err); }
+   shapes.forEach((shape,si)=>{
+    const colorSource={userData:{style:{...style,fill:effectiveFill||style.fill||'#62d6bd'}}};
+    baseShapes.push({shape,pathIndex:pi,subIndex:si,name:`Shape ${baseShapes.length+1}`,color:colorFromPath(colorSource,pi),visible:true,style:{...style,fill:effectiveFill||style.fill||'#62d6bd'}});
+   });
+  });
+  if(!baseShapes.length){
+   // Fallback for SVGs whose path style metadata isn't populated: keep any parsed paths as shapes.
+   data.paths.forEach((path,pi)=>{
+    let shapes=[];try{shapes=SVGLoader.createShapes(path);}catch{}
+    shapes.forEach((shape,si)=>baseShapes.push({shape,pathIndex:pi,subIndex:si,name:`Shape ${baseShapes.length+1}`,color:colorFromPath(path,pi),visible:true,style:path.userData?.style||{}}));
+   });
+  }
+  // Repair holes represented as separate nested paths, while preserving islands.
+  baseShapes=mergeNestedContours(baseShapes);
+  if(!baseShapes.length){
+   setStatus('SVG selected, but no extrudable paths were detected. Try an SVG with filled, closed vector shapes (not only a bitmap or open line drawing).');
+   $('fileLabel').textContent=name;
+   return;
+  }
+  modelName=(name||'model').replace(/\.svg$/i,'').replace(/[^\w-]+/g,'_');
+  $('fileLabel').textContent=name;$('empty').style.display='none';
+  buildLayerList();rebuildModel();$('exportStl').disabled=false;$('exportObj').disabled=false;$('resetView').disabled=false;$('wireBtn').disabled=false;
+  setStatus(`Loaded ${name} · ${baseShapes.length} shape(s) detected`);
+ }catch(e){console.error(e);setStatus('Could not load SVG: '+e.message);}
+}
+function buildLayerList(){
+ const wrap=$('layers');wrap.innerHTML='';
+ baseShapes.forEach((s,i)=>{
+  const row=document.createElement('div');row.className='layer';
+  const vis=document.createElement('input');vis.type='checkbox';vis.checked=s.visible;vis.title='Show/hide shape';
+  vis.addEventListener('change',()=>{s.visible=vis.checked;rebuildModel();});
+  const info=document.createElement('div');info.className='layername';info.textContent=s.name;info.title=`SVG path ${s.pathIndex+1}, shape ${s.subIndex+1}`;
+  const col=document.createElement('input');col.type='color';col.value=new THREE.Color(s.color).getHexString().replace(/^/,'#');col.title='Shape colour';
+  col.addEventListener('input',()=>{s.color=col.value;const ent=meshEntries.find(e=>e.shapeData===s);if(ent)ent.mesh.material.color.set(col.value);});
+  row.append(vis,info,col);wrap.appendChild(row);
+ });
+ $('allColors').disabled=false;
+}
+function rebuildModel(){
+ clearModel();
+ const widthMm=Math.max(1,Number($('width').value)||100),heightMm=Math.max(.4,Number($('height').value)||5),bevel=Math.max(0,Math.min(3,Number($('bevel').value)||0)),curve=Number($('quality').value)||4;
+ // SVG units are scaled to target width using the complete SVG viewBox.
+ const loader=new SVGLoader();let parsed;
+ try{parsed=loader.parse(svgText);}catch{return;}
+ const vbText=parsed.xml.getAttribute('viewBox');
+ const vbParts=vbText ? vbText.trim().split(/[\\s,]+/).map(Number) : [];
+ let vbw=vbParts.length===4 ? vbParts[2] : parseFloat(parsed.xml.getAttribute('width'))||100;
+ let vbh=vbParts.length===4 ? vbParts[3] : parseFloat(parsed.xml.getAttribute('height'))||100;
+ if(!Number.isFinite(vbw)||vbw<=0)vbw=100;if(!Number.isFinite(vbh)||vbh<=0)vbh=100;
+ const scale=widthMm/vbw,depth=heightMm;
+ const geometries=[];
+ for(const s of baseShapes){
+  if(!s.visible)continue;
+  const geom=new THREE.ExtrudeGeometry(s.shape,{depth,bevelEnabled:bevel>0,bevelThickness:bevel,bevelSize:bevel,bevelSegments:1,curveSegments:curve,steps:1});
+  // SVG y points down; flip y for normal world orientation. Geometry depth becomes Z.
+  geom.scale(scale,-scale,1);
+  geom.computeVertexNormals();
+  const mat=new THREE.MeshStandardMaterial({color:s.color,roughness:.68,metalness:.02,side:THREE.DoubleSide,wireframe:wire});
+  const mesh=new THREE.Mesh(geom,mat);modelRoot.add(mesh);meshEntries.push({mesh,shapeData:s});geometries.push(geom);
+ }
+ if(!geometries.length){$('shapeCount').textContent='No visible shapes';return;}
+ const box=new THREE.Box3().setFromObject(modelRoot);
+ if($('center').checked){const center=box.getCenter(new THREE.Vector3());modelRoot.position.x-=center.x;modelRoot.position.y-=center.y;modelRoot.position.z-=box.min.z;}
+ const finalBox=new THREE.Box3().setFromObject(modelRoot),size=finalBox.getSize(new THREE.Vector3());
+ $('shapeCount').textContent=`${meshEntries.length} visible shape(s)`;
+ $('dimensions').textContent=`Approx. ${size.x.toFixed(1)} × ${size.y.toFixed(1)} × ${size.z.toFixed(1)} mm`;
+}
+function resetCamera(){
+ const box=new THREE.Box3().setFromObject(modelRoot);if(box.isEmpty())return;
+ const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),max=Math.max(size.x,size.y,size.z);
+ controls.target.copy(center);camera.position.set(center.x+max*1.35,center.y-max*1.6,center.z+max*1.25);camera.near=Math.max(.1,max/1000);camera.far=Math.max(5000,max*20);camera.updateProjectionMatrix();controls.update();
+}
+function downloadBlob(blob,filename){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);}
+function exportSTL(){
+ const exporter=new STLExporter();const exportGroup=new THREE.Group();
+ modelRoot.updateMatrixWorld(true);
+ meshEntries.forEach(({mesh})=>{const clone=mesh.clone();clone.material=mesh.material;clone.updateMatrix();clone.applyMatrix4(modelRoot.matrixWorld);exportGroup.add(clone);});
+ const result=exporter.parse(exportGroup,{binary:true});
+ downloadBlob(new Blob([result],{type:'application/octet-stream'}),`${modelName}.stl`);
+ setStatus('STL exported. Note: STL geometry does not contain colour information.');
+}
+function exportOBJMTL(){
+ // Build OBJ and MTL with one material per visible SVG shape. Geometry is baked into world coordinates.
+ let obj='# SVG Extruder OBJ export\\nmtllib '+modelName+'.mtl\\n',mtl='# Materials generated by SVG Extruder\\n';
+ const matNames=new Map();
+ meshEntries.forEach((entry,i)=>{
+  const name='material_'+(i+1);matNames.set(entry.shapeData,name);
+  const c=new THREE.Color(entry.shapeData.color);
+  mtl+=`newmtl ${name}\\nKa ${c.r.toFixed(5)} ${c.g.toFixed(5)} ${c.b.toFixed(5)}\\nKd ${c.r.toFixed(5)} ${c.g.toFixed(5)} ${c.b.toFixed(5)}\\nKs 0.10000 0.10000 0.10000\\nd 1.0\\nillum 2\\n\\n`;
+ });
+ let offset=1;
+ modelRoot.updateMatrixWorld(true);
+ meshEntries.forEach(({mesh,shapeData})=>{
+  const geom=mesh.geometry.clone();geom.applyMatrix4(mesh.matrixWorld);
+  const pos=geom.getAttribute('position');let index=geom.index;
+  obj+=`\\no ${shapeData.name.replace(/\\s+/g,'_')}\\nusemtl ${matNames.get(shapeData)}\\n`;
+  for(let i=0;i<pos.count;i++)obj+=`v ${pos.getX(i).toFixed(6)} ${pos.getY(i).toFixed(6)} ${pos.getZ(i).toFixed(6)}\\n`;
+  if(!geom.getAttribute('normal'))geom.computeVertexNormals();
+  const nor=geom.getAttribute('normal');for(let i=0;i<nor.count;i++)obj+=`vn ${nor.getX(i).toFixed(6)} ${nor.getY(i).toFixed(6)} ${nor.getZ(i).toFixed(6)}\\n`;
+  const count=index?index.count:pos.count;
+  for(let i=0;i<count;i+=3){const a=(index?index.getX(i):i)+offset,b=(index?index.getX(i+1):i+1)+offset,c=(index?index.getX(i+2):i+2)+offset;obj+=`f ${a}//${a} ${b}//${b} ${c}//${c}\\n`;}
+  offset+=pos.count;geom.dispose();
+ });
+ // OBJ and MTL must be in the same folder. Package them together for convenience.
+ const files=[{name:`${modelName}.obj`,data:obj},{name:`${modelName}.mtl`,data:mtl}];
+ // Download both files individually; browser saves each file.
+ downloadBlob(new Blob([obj],{type:'text/plain'}),`${modelName}.obj`);
+ setTimeout(()=>downloadBlob(new Blob([mtl],{type:'text/plain'}),`${modelName}.mtl`),350);
+ setStatus('Exported OBJ and MTL. Keep both files in the same folder.');
+}
+$('svgFile').addEventListener('change',async e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ setStatus('Reading SVG file…');
+ try {
+  if(!file.name.toLowerCase().endsWith('.svg')&&!file.type.includes('svg')){setStatus('Please choose an SVG file.');return;}
+  svgText=await file.text();
+  setStatus('Parsing SVG paths…');
+  loadSvg(svgText,file.name);
+  if(baseShapes.length)resetCamera();
+ } catch(err) {
+  console.error(err);
+  setStatus('Could not read SVG file: '+(err?.message||err));
+ }
+});
+$('height').addEventListener('input',()=>{$('heightVal').textContent=Number($('height').value).toFixed(1)+' mm';if(svgText)rebuildModel();});
+['width','bevel','quality','center'].forEach(id=>$(id).addEventListener('input',()=>{if(svgText)rebuildModel();}));
+$('showEdges').addEventListener('change',()=>{wire=$('showEdges').checked;meshEntries.forEach(e=>e.mesh.material.wireframe=wire);});
+$('resetView').addEventListener('click',resetCamera);
+$('wireBtn').addEventListener('click',()=>{wire=!wire;$('showEdges').checked=wire;meshEntries.forEach(e=>e.mesh.material.wireframe=wire);});
+$('exportStl').addEventListener('click',exportSTL);$('exportObj').addEventListener('click',exportOBJMTL);
+$('allColors').addEventListener('click',()=>$('allColorPicker').click());
+$('allColorPicker').addEventListener('input',e=>{baseShapes.forEach(s=>s.color=e.target.value);buildLayerList();rebuildModel();});
+</script>
+</body>
+</html>
