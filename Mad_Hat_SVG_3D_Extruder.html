@@ -3,36 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SVG to 3D — SVG Extruder</title>
+<title>Mad Hat 3D Printing — SVG to 3D Extruder</title>
 <style>
-:root{--bg:#10141d;--panel:#191f2b;--panel2:#202838;--line:#303b4f;--text:#edf2fa;--muted:#9ba9bd;--accent:#62d6bd;--accent2:#8b9dff;--danger:#ff8b8b}
+:root{--bg:#151515;--panel:#202020;--panel2:#292929;--line:#3b3b3b;--text:#f4f4f4;--muted:#aaaaaa;--accent:#f0a500;--accent2:#ffbd3d;--danger:#ff7777}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;background:#131925;position:sticky;top:0;z-index:5}
-h1{font-size:20px;margin:0;font-weight:750;letter-spacing:.2px}header p{margin:3px 0 0;color:var(--muted);font-size:12px}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#10141d;font-weight:900;font-size:20px}
+header{padding:16px 22px;border-bottom:2px solid var(--accent);display:flex;align-items:center;justify-content:space-between;gap:16px;background:#191919;position:sticky;top:0;z-index:5;box-shadow:0 4px 18px #0005}
+h1{font-size:20px;margin:0;font-weight:850;letter-spacing:.2px}header p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.brand{display:flex;gap:13px;align-items:center}.logo{width:48px;height:48px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#151515;font-weight:900;font-size:20px;box-shadow:0 0 0 3px #f0a50020}.logo svg{width:36px;height:36px}.brand-kicker{font-size:10px;letter-spacing:2px;font-weight:900;color:var(--accent);margin-bottom:1px}
 main{display:grid;grid-template-columns:370px minmax(0,1fr);min-height:calc(100vh - 76px)}
 aside{padding:18px;border-right:1px solid var(--line);background:var(--panel);overflow:auto;max-height:calc(100vh - 76px)}
 section{margin-bottom:19px}.section-title{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:800;margin-bottom:10px}
 label{display:block;color:#dbe4f2;font-size:12px;margin:10px 0 6px}
-input[type=file]{display:none}.filebox{border:1px dashed #52617a;border-radius:12px;padding:16px;text-align:center;background:#151b27;cursor:pointer;color:var(--muted)}.filebox strong{display:block;color:var(--text);margin-bottom:4px}.filebox:hover{border-color:var(--accent)}
-input[type=number],input[type=text],select{width:100%;background:#111722;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 10px;outline:none}
+input[type=file]{display:none}.filebox{border:1px dashed #52617a;border-radius:12px;padding:16px;text-align:center;background:#202020;cursor:pointer;color:var(--muted)}.filebox strong{display:block;color:var(--text);margin-bottom:4px}.filebox:hover{border-color:var(--accent)}
+input[type=number],input[type=text],select{width:100%;background:#111111;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 10px;outline:none}
 input[type=range]{width:100%;accent-color:var(--accent)}.range-line{display:flex;justify-content:space-between;align-items:center;gap:8px}.value{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:750}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .checkrow{display:flex;align-items:center;gap:8px;color:#dbe4f2;font-size:12px;margin-top:10px}.checkrow input{accent-color:var(--accent)}
-button{border:0;border-radius:9px;padding:10px 12px;font-weight:750;cursor:pointer;color:#10141d;background:var(--accent);transition:.15s}button:hover{filter:brightness(1.06);transform:translateY(-1px)}button:disabled{opacity:.35;cursor:not-allowed;transform:none}
-button.secondary{background:#2b3548;color:var(--text);border:1px solid #3a4860}button.blue{background:var(--accent2)}button.full{width:100%;margin-top:8px}
+button{border:0;border-radius:9px;padding:10px 12px;font-weight:800;cursor:pointer;color:#151515;background:var(--accent);transition:.15s}button:hover{filter:brightness(1.06);transform:translateY(-1px)}button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+button.secondary{background:#303030;color:var(--text);border:1px solid #454545}button.blue{background:var(--accent2);color:#151515}button.full{width:100%;margin-top:8px}
 .note{font-size:11px;color:var(--muted);line-height:1.5}.notice{border:1px solid #66572f;background:#282416;color:#e9d9a7;border-radius:10px;padding:10px;font-size:11px;margin-top:12px}
 #layers{display:flex;flex-direction:column;gap:8px;max-height:390px;overflow:auto}
-.layer{display:grid;grid-template-columns:22px minmax(0,1fr) 34px;gap:7px;align-items:center;background:#141a25;border:1px solid var(--line);border-radius:9px;padding:8px;cursor:pointer}
-.layer.selected{border:2px solid var(--accent);background:#1b2b32;box-shadow:0 0 0 2px #62d6bd20}
+.layer{display:grid;grid-template-columns:22px minmax(0,1fr) 34px;gap:7px;align-items:center;background:#1b1b1b;border:1px solid var(--line);border-radius:9px;padding:8px;cursor:pointer}
+.layer.selected{border:2px solid var(--accent);background:#302817;box-shadow:0 0 0 2px #f0a50020}
 .layer input[type=color]{width:28px;height:27px;padding:0;border:0;background:none;cursor:pointer}.layer .layername{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.layer small{display:block;color:var(--muted);font-size:10px}.layer input[type=checkbox]{accent-color:var(--accent)}
 .layer-bottom{grid-column:2/4;display:grid;grid-template-columns:minmax(0,1fr) 48px;align-items:center;gap:8px;margin-top:2px}
 .layer-bottom input[type=range]{min-width:0;margin:0}.thickness-value{font-size:10px;text-align:right;color:var(--accent);font-weight:800;font-variant-numeric:tabular-nums}
 .layer-hint{grid-column:1/4;color:var(--muted);font-size:10px;margin-top:1px}
-.workspace{min-width:0;display:flex;flex-direction:column;min-height:calc(100vh - 76px)}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:#141a25}.toolbar .spacer{flex:1}.toolbar span{color:var(--muted);font-size:12px}
-#viewport{position:relative;flex:1;min-height:460px;height:calc(100vh - 190px);background:radial-gradient(ellipse at center,#222c3c 0%,#151b27 65%,#111620 100%);overflow:hidden}
+.workspace{min-width:0;display:flex;flex-direction:column;min-height:calc(100vh - 76px)}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:#1b1b1b}.toolbar .spacer{flex:1}.toolbar span{color:var(--muted);font-size:12px}
+#viewport{position:relative;flex:1;min-height:460px;height:calc(100vh - 190px);background:radial-gradient(ellipse at center,#303030 0%,#202020 65%,#151515 100%);overflow:hidden}
 #viewport canvas{display:block;width:100%;height:100%}.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;color:var(--muted)}.empty .empty-inner{max-width:340px;padding:24px}.empty strong{font-size:17px;color:#e8eef7;display:block;margin-bottom:8px}
-.statusbar{padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;background:#141a25}.pill{border:1px solid var(--line);padding:3px 7px;border-radius:20px}
+.statusbar{padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;background:#1b1b1b}.pill{border:1px solid var(--line);padding:3px 7px;border-radius:20px}
 @media(max-width:900px){main{grid-template-columns:1fr}aside{max-height:none;border-right:0;border-bottom:1px solid var(--line)}#viewport{min-height:440px}header{position:static}}
 </style>
 <script>
@@ -41,17 +41,17 @@ window.addEventListener('unhandledrejection',function(){const s=document.getElem
 </script>
 </head>
 <body>
-<header><div class="brand"><div class="logo">3D</div><div><h1>SVG → 3D Extruder</h1><p>Select imported SVGs by bounding box and export them separately</p></div></div><span class="pill">Browser-based</span></header>
+<header><div class="brand"><div class="logo" aria-label="Mad Hat logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><path d="M8 35h32l-3 5H11z" fill="currentColor"/><path d="M13 32c2-4 3-9 4-15 1-5 4-8 8-8s7 3 8 8c1 6 2 11 4 15z" fill="currentColor"/><path d="M19 18c3 2 7 2 10 0" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="brand-kicker">MAD HAT 3D PRINTING</div><h1>SVG → 3D Extruder</h1><p>Turn your artwork into print-ready 3D geometry</p></div></div><span class="pill">MAD HAT TOOLKIT&nbsp; · &nbsp;BROWSER APP</span></header>
 <main>
 <aside>
   <section>
-    <div class="section-title">1 · Import artwork</div>
+    <div class="section-title">01 · IMPORT ARTWORK</div>
     <label class="filebox" for="svgFile"><strong>Choose SVG files</strong><span id="fileLabel">Select one or multiple SVGs</span></label>
     <input id="svgFile" type="file" accept=".svg,image/svg+xml" multiple>
     <p class="note">Best results: SVGs made from filled, closed shapes. Text should be converted to paths in your vector editor first.</p>
   </section>
   <section>
-    <div class="section-title">2 · Model dimensions</div>
+    <div class="section-title">02 · MODEL DIMENSIONS</div>
     <label for="height">Default thickness <span class="value" id="heightVal">5.0 mm</span></label>
     <input id="height" type="range" min="1" max="50" step="1" value="5">
     <p class="note">Changing the default thickness updates every shape. You can then fine-tune each shape using its own slider below.</p>
@@ -64,16 +64,16 @@ window.addEventListener('unhandledrejection',function(){const s=document.getElem
     <label class="checkrow"><input id="showEdges" type="checkbox"> Show mesh edges (preview only)</label>
   </section>
   <section>
-    <div class="section-title">3 · Select SVGs & shapes</div>
+    <div class="section-title">03 · SVG GROUPS & SHAPES</div>
     <p class="note">Click a shape in the preview or a shape row to select its entire imported SVG. The bounding box surrounds all shapes from that SVG. Hold Ctrl while clicking the preview or rows to select multiple SVGs.</p>
     <div id="svgSelectionList" class="note" style="display:flex;flex-direction:column;gap:6px;margin:10px 0"></div>
     <div id="layers"><div class="note">Load an SVG to see its shapes here.</div></div>
     <button class="secondary full" id="allColors" disabled>Apply one colour to all shapes</button>
-    <input id="allColorPicker" type="color" value="#62d6bd" style="display:none">
+    <input id="allColorPicker" type="color" value="#f0a500" style="display:none">
     <button class="secondary full" id="allThickness" disabled>Set all shapes to default thickness</button>
   </section>
   <section>
-    <div class="section-title">4 · Export model</div>
+    <div class="section-title">04 · EXPORT MODEL</div>
     <button id="exportSelected" class="full" disabled>Export selected SVGs separately (STL)</button>
     <button id="exportAllSeparate" class="blue full" disabled>Export ALL SVGs separately (STL)</button>
     <button id="exportStl" class="secondary full" disabled>Export combined STL</button>
@@ -126,7 +126,7 @@ function clearModel(){
  while(modelRoot.children.length){const o=modelRoot.children[0];modelRoot.remove(o);if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose()}}
  meshEntries=[];clearSelectionHelpers();
 }
-function colorFromPath(path,index){const s=path.userData?.style||{};let c=s.fill;if(!c||c==='none'||c==='transparent')c=['#62d6bd','#8b9dff','#ffb86b','#ff7c9b','#e8e879','#76b8ff'][index%6];try{if(c.startsWith('url('))c='#62d6bd';return new THREE.Color(c).getStyle()}catch{return '#62d6bd'}}
+function colorFromPath(path,index){const s=path.userData?.style||{};let c=s.fill;if(!c||c==='none'||c==='transparent')c=['#f0a500','#ffbd3d','#ffbd3d','#ff7777','#f5d76e','#d5d5d5'][index%6];try{if(c.startsWith('url('))c='#f0a500';return new THREE.Color(c).getStyle()}catch{return '#f0a500'}}
 function pointInPolygon(point,polygon){let inside=false;for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){const a=polygon[i],b=polygon[j];if(((a.y>point.y)!==(b.y>point.y))&&point.x<(b.x-a.x)*(point.y-a.y)/(b.y-a.y)+a.x)inside=!inside}return inside}
 function mergeNestedContours(items){
  if(items.length<2)return items;
@@ -149,7 +149,7 @@ function parseSvgShapes(svgSource,name,fileIndex){
   const effectiveFill=(fill&&fill!=='none')?fill:nodeFill;
   if(effectiveFill==='none'||(fill==='none'&&!nodeFill)||/^url\(/i.test(effectiveFill||''))return;
   let shapes=[];try{shapes=SVGLoader.createShapes(path)}catch(err){console.warn(err)}
-  shapes.forEach((shape,si)=>items.push({shape,pathIndex:pi,subIndex:si,name:`${name} · Shape ${items.length+1}`,color:colorFromPath({userData:{style:{...style,fill:effectiveFill||style.fill||'#62d6bd'}}},pi+fileIndex),visible:true,style:{...style,fill:effectiveFill||style.fill||'#62d6bd'},sourceName:name,fileIndex,vbw,vbh,thickness:Number($('height').value)}))
+  shapes.forEach((shape,si)=>items.push({shape,pathIndex:pi,subIndex:si,name:`${name} · Shape ${items.length+1}`,color:colorFromPath({userData:{style:{...style,fill:effectiveFill||style.fill||'#f0a500'}}},pi+fileIndex),visible:true,style:{...style,fill:effectiveFill||style.fill||'#f0a500'},sourceName:name,fileIndex,vbw,vbh,thickness:Number($('height').value)}))
  });
  if(!items.length)data.paths.forEach((path,pi)=>{let shapes=[];try{shapes=SVGLoader.createShapes(path)}catch{}shapes.forEach((shape,si)=>items.push({shape,pathIndex:pi,subIndex:si,name:`${name} · Shape ${items.length+1}`,color:colorFromPath(path,pi+fileIndex),visible:true,style:path.userData?.style||{},sourceName:name,fileIndex,vbw,vbh,thickness:Number($('height').value)}))});
  return{shapes:mergeNestedContours(items),vbw,vbh}
@@ -178,7 +178,7 @@ function buildSvgSelectionList(){
  const wrap=$('svgSelectionList');wrap.innerHTML='';
  parsedSvgFiles.forEach(file=>{
   const row=document.createElement('label');
-  row.style.cssText='display:flex;align-items:center;gap:8px;background:#141a25;border:1px solid var(--line);border-radius:8px;padding:8px;margin:0;cursor:pointer;font-size:11px';
+  row.style.cssText='display:flex;align-items:center;gap:8px;background:#1b1b1b;border:1px solid var(--line);border-radius:8px;padding:8px;margin:0;cursor:pointer;font-size:11px';
   row.style.borderColor=selectedSvgIds.has(file.fileIndex)?'var(--accent)':'var(--line)';
   const cb=document.createElement('input');cb.type='checkbox';cb.checked=selectedSvgIds.has(file.fileIndex);cb.style.accentColor='var(--accent)';
   cb.addEventListener('change',()=>{
@@ -237,7 +237,7 @@ function buildLayerList() {
         const card = document.createElement('div');
 
         card.style.cssText = `
-            background: #141a25;
+            background: #1b1b1b;
             border: 1px solid ${selected ? 'var(--accent)' : 'var(--line)'};
             border-radius: 10px;
             padding: 11px;
@@ -246,8 +246,8 @@ function buildLayerList() {
         `;
 
         if (selected) {
-            card.style.boxShadow = '0 0 0 1px #62d6bd25';
-            card.style.background = '#1b2b32';
+            card.style.boxShadow = '0 0 0 1px #f0a50025';
+            card.style.background = '#302817';
         }
 
         // Group header.
@@ -599,7 +599,7 @@ function exportEntriesSTL(entries,filename){
 }
 function exportSTL(){
  const ok=exportEntriesSTL(meshEntries,`${modelName}.stl`);
- if(ok)setStatus('Combined STL exported. STL does not store colour.');
+ if(ok)setStatus('Mad Hat export complete: combined STL saved. STL does not store colour.');
 }
 async function exportSeparately(ids){
  const unique=[...new Set(ids)];
@@ -615,7 +615,7 @@ async function exportSeparately(ids){
  setStatus(`Exported ${available.length} separate STL file(s). Each file contains one imported SVG's visible shapes.`);
 }
 function exportOBJMTL(){
- let obj='# SVG Extruder OBJ export\nmtllib '+modelName+'.mtl\n',mtl='# Materials generated by SVG Extruder\n';const matNames=new Map();
+ let obj='# Mad Hat 3D Printing — SVG Extruder OBJ export\nmtllib '+modelName+'.mtl\n',mtl='# Materials generated by Mad Hat SVG Extruder\n';const matNames=new Map();
  meshEntries.forEach((entry,i)=>{const name='material_'+(i+1);matNames.set(entry.shapeData,name);const c=new THREE.Color(entry.shapeData.color);mtl+=`newmtl ${name}\nKa ${c.r.toFixed(5)} ${c.g.toFixed(5)} ${c.b.toFixed(5)}\nKd ${c.r.toFixed(5)} ${c.g.toFixed(5)} ${c.b.toFixed(5)}\nKs 0.10000 0.10000 0.10000\nd 1.0\nillum 2\n\n`});
  let offset=1;modelRoot.updateMatrixWorld(true);
  meshEntries.forEach(({mesh,shapeData})=>{
@@ -627,7 +627,7 @@ function exportOBJMTL(){
   offset+=pos.count;geom.dispose()
  });
  downloadBlob(new Blob([obj],{type:'text/plain'}),`${modelName}.obj`);setTimeout(()=>downloadBlob(new Blob([mtl],{type:'text/plain'}),`${modelName}.mtl`),350);
- setStatus('Exported OBJ and MTL with individual shape colours and thicknesses. Keep both files in the same folder.')
+ setStatus('Mad Hat export complete: OBJ + MTL saved with individual shape colours and thicknesses. Keep both files in the same folder.')
 }
 $('svgFile').addEventListener('change',async e=>{
  const input=e.target,selected=[...(input.files||[])];if(!selected.length)return;setStatus(`Reading ${selected.length} SVG file(s)…`);
