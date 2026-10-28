@@ -9,7 +9,7 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 header{padding:16px 22px;border-bottom:2px solid var(--accent);display:flex;align-items:center;justify-content:space-between;gap:16px;background:#191919;position:sticky;top:0;z-index:5;box-shadow:0 4px 18px #0005}
 h1{font-size:20px;margin:0;font-weight:850;letter-spacing:.2px}header p{margin:3px 0 0;color:var(--muted);font-size:12px}
-.brand{display:flex;gap:13px;align-items:center}.logo{width:48px;height:48px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#151515;font-weight:900;font-size:20px;box-shadow:0 0 0 3px #f0a50020}.logo svg{width:36px;height:36px}.brand-kicker{font-size:10px;letter-spacing:2px;font-weight:900;color:var(--accent);margin-bottom:1px}
+.brand{display:flex;gap:13px;align-items:center}.logo{width:48px;height:48px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#151515;font-weight:900;font-size:20px;box-shadow:0 0 0 3px #f0a50020}.logo svg{width:36px;height:36px}.brand-kicker{font-size:10px;letter-spacing:2px;font-weight:900;color:var(--accent);margin-bottom:1px}.brand-workflow{border-left:1px solid #303949;padding-left:20px;margin-left:2px}.workflow-title{font-size:14px;color:#d2d9e4}.workflow-tagline{font-size:13px;font-style:italic;color:#aebbd0}
 main{display:grid;grid-template-columns:370px minmax(0,1fr);min-height:calc(100vh - 76px)}
 aside{padding:18px;border-right:1px solid var(--line);background:var(--panel);overflow:auto;max-height:calc(100vh - 76px)}
 section{margin-bottom:19px}.section-title{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:800;margin-bottom:10px}
@@ -41,7 +41,7 @@ window.addEventListener('unhandledrejection',function(){const s=document.getElem
 </script>
 </head>
 <body>
-<header><div class="brand"><div class="logo" aria-label="Mad Hat logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><path d="M8 35h32l-3 5H11z" fill="currentColor"/><path d="M13 32c2-4 3-9 4-15 1-5 4-8 8-8s7 3 8 8c1 6 2 11 4 15z" fill="currentColor"/><path d="M19 18c3 2 7 2 10 0" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="brand-kicker">MAD HAT 3D PRINTING</div><h1>SVG → 3D Extruder</h1><p>Turn your artwork into print-ready 3D geometry</p></div></div><span class="pill">&nbsp;Browser-Based</span></header>
+<header><div class="brand"><div class="logo" aria-label="Mad Hat logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><path d="M8 35h32l-3 5H11z" fill="currentColor"/><path d="M13 32c2-4 3-9 4-15 1-5 4-8 8-8s7 3 8 8c1 6 2 11 4 15z" fill="currentColor"/><path d="M19 18c3 2 7 2 10 0" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="brand-kicker">MAD HAT 3D PRINTING</div><h1>SVG → 3D Extruder</h1></div><div class="brand-workflow"><div class="workflow-title">Import · Extrude · Create</div><div class="workflow-tagline">Turn your artwork into print-ready 3D geometry</div></div></div><span class="pill">&nbsp;Browser-Based</span></header>
 <main>
 <aside>
   <section>
