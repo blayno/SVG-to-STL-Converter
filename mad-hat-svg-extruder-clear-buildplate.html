@@ -84,7 +84,7 @@ window.addEventListener('unhandledrejection',function(){const s=document.getElem
 </aside>
 <div class="workspace">
   <div class="toolbar">
-    <button class="secondary" id="resetView" disabled>Reset view</button>
+    <button class="secondary" id="resetView" disabled>Reset view</button><button class="secondary" id="clearBuildplate" disabled>Clear buildplate</button>
     <button class="secondary" id="wireBtn" disabled>Wireframe</button>
     <span>Click a model to select its SVG · Ctrl+click to multi-select · drag to orbit · scroll to zoom · right-drag to pan</span><div class="spacer"></div><span id="shapeCount">No model loaded</span>
   </div>
@@ -170,7 +170,7 @@ function loadSvgFiles(files) {
   modelName=svgFiles.length===1?svgFiles[0].name.replace(/\.svg$/i,'').replace(/[^\w-]+/g,'_'):'combined_svg_model';
   $('fileLabel').textContent=`${svgFiles.length} SVG file(s): `+svgFiles.map(f=>f.name).join(', ');
   $('empty').style.display='none';buildSvgSelectionList();buildLayerList();rebuildModel();
-  ['exportStl','exportObj','exportSelected','exportAllSeparate','resetView','wireBtn','allThickness','allColors'].forEach(id=>$(id).disabled=false);
+  ['exportStl','exportObj','exportSelected','exportAllSeparate','resetView','clearBuildplate','wireBtn','allThickness','allColors'].forEach(id=>$(id).disabled=false);
   setStatus(`Added ${files.length} SVG file(s). ${svgFiles.length} SVG file(s) loaded. Ctrl+click to select multiple SVGs.`);
  } catch(e){console.error(e);setStatus('Could not load SVG: '+e.message)}
 }
@@ -551,6 +551,15 @@ function handlePreviewSelection(event){
  window.addEventListener('pointerup',onUp);
 }
 
+function clearBuildplate(){
+ if(!svgFiles.length)return;
+ if(!confirm(`Clear all ${svgFiles.length} imported SVG file(s) from the buildplate?`))return;
+ clearModel();svgFiles=[];parsedSvgFiles=[];baseShapes=[];selectedSvgIds.clear();modelName='model';wire=false;modelRoot.position.set(0,0,0);
+  $('svgFile').value="";$('fileLabel').textContent='Select one or multiple SVGs';$('showEdges').checked=false;
+ buildSvgSelectionList();buildLayerList();$('empty').style.display='grid';$('shapeCount').textContent='No model loaded';$('dimensions').textContent='—';
+ ['exportStl','exportObj','exportSelected','exportAllSeparate','resetView','clearBuildplate','wireBtn','allThickness','allColors'].forEach(id=>$(id).disabled=true);
+ setStatus('Buildplate cleared · Select SVG files to begin');
+}
 function resetCamera(){
     const box = new THREE.Box3().setFromObject(modelRoot);
     if (box.isEmpty()) return;
@@ -645,6 +654,7 @@ $('svgFile').addEventListener('change',async e=>{
 $('height').addEventListener('input',()=>{$('heightVal').textContent=Number($('height').value).toFixed(1)+' mm';if(baseShapes.length){baseShapes.forEach(s=>s.thickness=Number($('height').value));buildLayerList();rebuildModel()}});
 ['width','bevel','quality','center'].forEach(id=>$(id).addEventListener('input',()=>{if(baseShapes.length)rebuildModel()}));
 $('showEdges').addEventListener('change',()=>{wire=$('showEdges').checked;meshEntries.forEach(e=>e.mesh.material.wireframe=wire)});
+$('clearBuildplate').addEventListener('click',clearBuildplate);
 $('resetView').addEventListener('click',resetCamera);
 $('wireBtn').addEventListener('click',()=>{wire=!wire;$('showEdges').checked=wire;meshEntries.forEach(e=>e.mesh.material.wireframe=wire)});
 $('exportStl').addEventListener('click',exportSTL);
