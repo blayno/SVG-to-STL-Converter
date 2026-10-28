@@ -41,7 +41,7 @@ window.addEventListener('unhandledrejection',function(){const s=document.getElem
 </script>
 </head>
 <body>
-<header><div class="brand"><div class="logo" aria-label="Mad Hat logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><path d="M8 35h32l-3 5H11z" fill="currentColor"/><path d="M13 32c2-4 3-9 4-15 1-5 4-8 8-8s7 3 8 8c1 6 2 11 4 15z" fill="currentColor"/><path d="M19 18c3 2 7 2 10 0" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="brand-kicker">MAD HAT 3D PRINTING</div><h1>SVG → 3D Extruder</h1><p>Turn your artwork into print-ready 3D geometry</p></div></div><span class="pill">MAD HAT TOOLKIT&nbsp; · &nbsp;BROWSER APP</span></header>
+<header><div class="brand"><div class="logo" aria-label="Mad Hat logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><path d="M8 35h32l-3 5H11z" fill="currentColor"/><path d="M13 32c2-4 3-9 4-15 1-5 4-8 8-8s7 3 8 8c1 6 2 11 4 15z" fill="currentColor"/><path d="M19 18c3 2 7 2 10 0" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="brand-kicker">MAD HAT 3D PRINTING</div><h1>SVG → 3D Extruder</h1><p>Turn your artwork into print-ready 3D geometry</p></div></div><span class="pill">&nbsp;Browser-Based</span></header>
 <main>
 <aside>
   <section>
@@ -55,10 +55,7 @@ window.addEventListener('unhandledrejection',function(){const s=document.getElem
     <label for="height">Default thickness <span class="value" id="heightVal">5.0 mm</span></label>
     <input id="height" type="range" min="1" max="50" step="1" value="5">
     <p class="note">Changing the default thickness updates every shape. You can then fine-tune each shape using its own slider below.</p>
-    <div class="row">
-      <div><label for="width">Model width (mm)</label><input id="width" type="number" min="1" max="500" step="1" value="100"></div>
-      <div><label for="bevel">Bevel (mm)</label><input id="bevel" type="number" min="0" max="3" step="0.2" value="0"></div>
-    </div>
+
     <label for="quality">Curve detail</label><select id="quality"><option value="2">Fast</option><option value="4" selected>Balanced</option><option value="8">High detail</option><option value="12">Very high detail</option></select>
     <label class="checkrow"><input id="center" type="checkbox"> Center model on the build plate</label>
     <label class="checkrow"><input id="showEdges" type="checkbox"> Show mesh edges (preview only)</label>
@@ -499,7 +496,7 @@ function buildLayerList() {
 
 function rebuildModel(updateLayers=true){
  clearModel();
- const widthMm=Math.max(1,Number($('width').value)||100),bevel=Math.max(0,Math.min(3,Number($('bevel').value)||0)),curve=Number($('quality').value)||4;
+ const widthMm=100,bevel=0,curve=Number($('quality').value)||4;
  // Keep a common scale for the combined layout so all imported SVGs retain their relative size.
  const vbw=parsedSvgFiles[0]?.vbw||100,scale=widthMm/vbw;
  for(const s of baseShapes){
@@ -652,7 +649,7 @@ $('svgFile').addEventListener('change',async e=>{
  finally{input.value=''}
 });
 $('height').addEventListener('input',()=>{$('heightVal').textContent=Number($('height').value).toFixed(1)+' mm';if(baseShapes.length){baseShapes.forEach(s=>s.thickness=Number($('height').value));buildLayerList();rebuildModel()}});
-['width','bevel','quality','center'].forEach(id=>$(id).addEventListener('input',()=>{if(baseShapes.length)rebuildModel()}));
+['quality','center'].forEach(id=>$(id).addEventListener('input',()=>{if(baseShapes.length)rebuildModel()}));
 $('showEdges').addEventListener('change',()=>{wire=$('showEdges').checked;meshEntries.forEach(e=>e.mesh.material.wireframe=wire)});
 $('clearBuildplate').addEventListener('click',clearBuildplate);
 $('resetView').addEventListener('click',resetCamera);
