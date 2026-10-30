@@ -34,6 +34,15 @@ button.secondary{background:#303030;color:var(--text);border:1px solid #454545}b
 #viewport canvas{display:block;width:100%;height:100%}.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;color:var(--muted)}.empty .empty-inner{max-width:340px;padding:24px}.empty strong{font-size:17px;color:#e8eef7;display:block;margin-bottom:8px}
 .statusbar{padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;background:#1b1b1b}.pill{border:1px solid var(--line);padding:3px 7px;border-radius:20px}
 @media(max-width:900px){main{grid-template-columns:1fr}aside{max-height:none;border-right:0;border-bottom:1px solid var(--line)}#viewport{min-height:440px}header{position:static}}
+
+.hat {
+  font-size: 40px;
+  line-height: 1;
+  width: 48px;
+  display: grid;
+  place-items: center;
+}
+
 </style>
 <script>
 window.addEventListener('error',function(e){const s=document.getElementById('status');if(s&&e.message)s.textContent='Preview error: '+e.message+' — check internet access and reload.'});
@@ -41,7 +50,20 @@ window.addEventListener('unhandledrejection',function(){const s=document.getElem
 </script>
 </head>
 <body>
-<header><div class="brand"><div class="logo" aria-label="Mad Hat logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><path d="M8 35h32l-3 5H11z" fill="currentColor"/><path d="M13 32c2-4 3-9 4-15 1-5 4-8 8-8s7 3 8 8c1 6 2 11 4 15z" fill="currentColor"/><path d="M19 18c3 2 7 2 10 0" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="brand-kicker">MAD HAT 3D PRINTING</div><h1>SVG → 3D Extruder</h1></div><div class="brand-workflow"><div class="workflow-title">Import · Extrude · Create</div><div class="workflow-tagline">Turn your artwork into print-ready 3D geometry</div></div></div><span class="pill">&nbsp;Browser-Based</span></header>
+<header>
+  <div class="brand">
+    <div class="hat">🎩</div>
+    <div>
+      <div class="brand-kicker">MAD HAT 3D PRINTING</div>
+      <h1>SVG → 3D Extruder</h1>
+    </div>
+    <div class="brand-workflow">
+      <div class="workflow-title">Import · Extrude · Create</div>
+      <div class="workflow-tagline">Turn your artwork into print-ready 3D geometry</div>
+    </div>
+  </div>
+  <span class="pill">&nbsp;Browser-Based</span>
+</header>
 <main>
 <aside>
   <section>
