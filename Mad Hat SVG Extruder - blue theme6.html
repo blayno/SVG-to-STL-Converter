@@ -5,34 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mad Hat 3D Printing — SVG to 3D Extruder</title>
 <style>
-:root{--bg:#151515;--panel:#202020;--panel2:#292929;--line:#3b3b3b;--text:#f4f4f4;--muted:#aaaaaa;--accent:#f0a500;--accent2:#ffbd3d;--danger:#ff7777}
+:root{--bg:#0b1220;--panel:#121c2c;--panel2:#1a273a;--line:#2e4058;--text:#f4f4f4;--muted:#a9b8cc;--accent:#f0a500;--accent2:#ffbd3d;--danger:#ff7777}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-header{padding:16px 22px;border-bottom:2px solid var(--accent);display:flex;align-items:center;justify-content:space-between;gap:16px;background:#191919;position:sticky;top:0;z-index:5;box-shadow:0 4px 18px #0005}
+header{padding:16px 22px;border-bottom:2px solid var(--accent);display:flex;align-items:center;justify-content:space-between;gap:16px;background:#0c1524;position:sticky;top:0;z-index:5;box-shadow:0 4px 18px #0005}
 h1{font-size:20px;margin:0;font-weight:850;letter-spacing:.2px}header p{margin:3px 0 0;color:var(--muted);font-size:12px}
 .brand{display:flex;gap:13px;align-items:center}.logo{width:48px;height:48px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#151515;font-weight:900;font-size:20px;box-shadow:0 0 0 3px #f0a50020}.logo svg{width:36px;height:36px}.brand-kicker{font-size:10px;letter-spacing:2px;font-weight:900;color:var(--accent);margin-bottom:1px}.brand-workflow{border-left:1px solid #303949;padding-left:20px;margin-left:2px}.workflow-title{font-size:14px;color:#d2d9e4}.workflow-tagline{font-size:13px;font-style:italic;color:#aebbd0}
 main{display:grid;grid-template-columns:370px minmax(0,1fr);min-height:calc(100vh - 76px)}
 aside{padding:18px;border-right:1px solid var(--line);background:var(--panel);overflow:auto;max-height:calc(100vh - 76px)}
 section{margin-bottom:19px}.section-title{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:800;margin-bottom:10px}
 label{display:block;color:#dbe4f2;font-size:12px;margin:10px 0 6px}
-input[type=file]{display:none}.filebox{border:1px dashed #52617a;border-radius:12px;padding:16px;text-align:center;background:#202020;cursor:pointer;color:var(--muted)}.filebox strong{display:block;color:var(--text);margin-bottom:4px}.filebox:hover{border-color:var(--accent)}
-input[type=number],input[type=text],select{width:100%;background:#111111;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 10px;outline:none}
+input[type=file]{display:none}.filebox{border:1px dashed #52617a;border-radius:12px;padding:16px;text-align:center;background:#121c2c;cursor:pointer;color:var(--muted)}.filebox strong{display:block;color:var(--text);margin-bottom:4px}.filebox:hover{border-color:var(--accent)}
+input[type=number],input[type=text],select{width:100%;background:#0c1524;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px 10px;outline:none}
 input[type=range]{width:100%;accent-color:var(--accent)}.range-line{display:flex;justify-content:space-between;align-items:center;gap:8px}.value{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:750}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .checkrow{display:flex;align-items:center;gap:8px;color:#dbe4f2;font-size:12px;margin-top:10px}.checkrow input{accent-color:var(--accent)}
 button{border:0;border-radius:9px;padding:10px 12px;font-weight:800;cursor:pointer;color:#151515;background:var(--accent);transition:.15s}button:hover{filter:brightness(1.06);transform:translateY(-1px)}button:disabled{opacity:.35;cursor:not-allowed;transform:none}
-button.secondary{background:#303030;color:var(--text);border:1px solid #454545}button.blue{background:var(--accent2);color:#151515}button.full{width:100%;margin-top:8px}
+button.secondary{background:#1b2a40;color:var(--text);border:1px solid #344a68}button.blue{background:var(--accent2);color:#151515}button.full{width:100%;margin-top:8px}
 .note{font-size:11px;color:var(--muted);line-height:1.5}.notice{border:1px solid #66572f;background:#282416;color:#e9d9a7;border-radius:10px;padding:10px;font-size:11px;margin-top:12px}
 #layers{display:flex;flex-direction:column;gap:8px;max-height:390px;overflow:auto}
-.layer{display:grid;grid-template-columns:22px minmax(0,1fr) 34px;gap:7px;align-items:center;background:#1b1b1b;border:1px solid var(--line);border-radius:9px;padding:8px;cursor:pointer}
-.layer.selected{border:2px solid var(--accent);background:#302817;box-shadow:0 0 0 2px #f0a50020}
+.layer{display:grid;grid-template-columns:22px minmax(0,1fr) 34px;gap:7px;align-items:center;background:#101a29;border:1px solid var(--line);border-radius:9px;padding:8px;cursor:pointer}
+.layer.selected{border:2px solid var(--accent);background:#25354b;box-shadow:0 0 0 2px #f0a50020}
 .layer input[type=color]{width:28px;height:27px;padding:0;border:0;background:none;cursor:pointer}.layer .layername{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.layer small{display:block;color:var(--muted);font-size:10px}.layer input[type=checkbox]{accent-color:var(--accent)}
 .layer-bottom{grid-column:2/4;display:grid;grid-template-columns:minmax(0,1fr) 48px;align-items:center;gap:8px;margin-top:2px}
 .layer-bottom input[type=range]{min-width:0;margin:0}.thickness-value{font-size:10px;text-align:right;color:var(--accent);font-weight:800;font-variant-numeric:tabular-nums}
 .layer-hint{grid-column:1/4;color:var(--muted);font-size:10px;margin-top:1px}
-.workspace{min-width:0;display:flex;flex-direction:column;min-height:calc(100vh - 76px)}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:#1b1b1b}.toolbar .spacer{flex:1}.toolbar span{color:var(--muted);font-size:12px}
+.workspace{min-width:0;display:flex;flex-direction:column;min-height:calc(100vh - 76px)}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);background:#101a29}.toolbar .spacer{flex:1}.toolbar span{color:var(--muted);font-size:12px}
 #viewport{position:relative;flex:1;min-height:460px;height:calc(100vh - 190px);background:radial-gradient(ellipse at center,#303030 0%,#202020 65%,#151515 100%);overflow:hidden}
 #viewport canvas{display:block;width:100%;height:100%}.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;color:var(--muted)}.empty .empty-inner{max-width:340px;padding:24px}.empty strong{font-size:17px;color:#e8eef7;display:block;margin-bottom:8px}
-.statusbar{padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;background:#1b1b1b}.pill{border:1px solid var(--line);padding:3px 7px;border-radius:20px}
+.statusbar{padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px;background:#101a29}.pill{border:1px solid var(--line);padding:3px 7px;border-radius:20px}
 @media(max-width:900px){main{grid-template-columns:1fr}aside{max-height:none;border-right:0;border-bottom:1px solid var(--line)}#viewport{min-height:440px}header{position:static}}
 
 .hat {
@@ -197,7 +197,7 @@ function buildSvgSelectionList(){
  const wrap=$('svgSelectionList');wrap.innerHTML='';
  parsedSvgFiles.forEach(file=>{
   const row=document.createElement('label');
-  row.style.cssText='display:flex;align-items:center;gap:8px;background:#1b1b1b;border:1px solid var(--line);border-radius:8px;padding:8px;margin:0;cursor:pointer;font-size:11px';
+  row.style.cssText='display:flex;align-items:center;gap:8px;background:#101a29;border:1px solid var(--line);border-radius:8px;padding:8px;margin:0;cursor:pointer;font-size:11px';
   row.style.borderColor=selectedSvgIds.has(file.fileIndex)?'var(--accent)':'var(--line)';
   const cb=document.createElement('input');cb.type='checkbox';cb.checked=selectedSvgIds.has(file.fileIndex);cb.style.accentColor='var(--accent)';
   cb.addEventListener('change',()=>{
@@ -256,7 +256,7 @@ function buildLayerList() {
         const card = document.createElement('div');
 
         card.style.cssText = `
-            background: #1b1b1b;
+            background: #101a29;
             border: 1px solid ${selected ? 'var(--accent)' : 'var(--line)'};
             border-radius: 10px;
             padding: 11px;
@@ -266,7 +266,7 @@ function buildLayerList() {
 
         if (selected) {
             card.style.boxShadow = '0 0 0 1px #f0a50025';
-            card.style.background = '#302817';
+            card.style.background = '#25354b';
         }
 
         // Group header.
